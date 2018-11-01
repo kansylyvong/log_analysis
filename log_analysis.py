@@ -22,5 +22,18 @@ def get_popular_authors():
     print(data)
     db.close()
 
+def get_errors_above_one():
+    db = psycopg2.connect("dbname=news")
+
+    c = db.cursor()
+
+    c.execute("select day, percentageOfErrors from ( select day, round( cast( float8 ((numberOfErrors/totalHits::float) * 100) as numeric), 1) as percentageOfErrors from ( select date(time) as day, sum(case when status = '404 NOT FOUND' then 1 else 0 end) as numberOfErrors, count(*) as totalHits from log group by day) as dt ) as ddt where percentageOfErrors > 1;")
+
+    data = c.fetchall()
+    print(data)
+    db.close()
+
+
+get_errors_above_one()
 get_popular_articles()
 get_popular_authors()
