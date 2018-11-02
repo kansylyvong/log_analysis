@@ -18,7 +18,7 @@ def get_popular_authors():
 
     c = db.cursor()
 
-    c.execute("select authors.name, dt.views from (select substring(path, 10) as title, count(*) as views from log where path != '/' and status = '200 OK' group by 1 order by views desc) as dt join articles on articles.slug = dt.title join authors on articles.author = authors.id order by dt.views desc;")
+    c.execute("select authors.name, sum(dt.views) as views from ( select substring(path, 10) as title, count(*) as views from log where path != '/' and status = '200 OK' group by 1 order by views desc) as dt join articles on articles.slug = dt.title join authors on articles.author = authors.id group by authors.name order by views desc;")
 
     data = c.fetchall()
     for datum in data:
