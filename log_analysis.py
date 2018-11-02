@@ -78,6 +78,6 @@ def get_errors_above_one():
     db.close()
 
 
-get_errors_above_one()
 get_popular_articles()
 get_popular_authors()
+get_errors_above_one()
