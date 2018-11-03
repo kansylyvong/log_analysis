@@ -12,6 +12,10 @@ You can now exit the psql command line. To import the schema and data into the n
 
 `psql -d news -f newsdata.sql`
 
-To run the reports simply type
+If you do not have the psycopg2 module installed, from the command line run:
+
+`pip install psycopg2`
+
+To run the reports type the following from the command line:
 
 `python log_analysis.py`
