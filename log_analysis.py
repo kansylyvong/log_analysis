@@ -1,12 +1,20 @@
 #!/usr/bin/env python
 
+"""Log Analysis project.
+
+Program to run reports against a mock news database,
+and return the following information:
+    1. 3 Most popular articles
+    2. Most popular authors by article views
+    3. Days with errors above 1%
+"""
+
 import psycopg2
 import datetime
 
 
 def execute_query(query):
-    # executes query against news db  and returns results
-
+    """execute query against news db and return results."""
     try:
         db = psycopg2.connect("dbname=news")
         c = db.cursor()
@@ -19,7 +27,7 @@ def execute_query(query):
 
 
 def get_popular_articles():
-    # queries the news db and return 3 most popular articles
+    """Print 3 most popular articles."""
     query = """select articles.title, dt.views
                  from (
                  select substring(path, 10) as title, count(*) as views
@@ -36,7 +44,7 @@ def get_popular_articles():
 
 
 def get_popular_authors():
-    # queries news db and returns most popular authors by views
+    """Print most popular authors by views."""
     query = """select authors.name, sum(dt.views) as views
                  from (
                  select substring(path, 10) as title, count(*) as views
@@ -56,7 +64,7 @@ def get_popular_authors():
 
 
 def get_errors_above_one():
-    # queries news db and returns days with errors above 1%
+    """Print days and percent of errors with errors above 1%."""
     query = """select day,
                  to_char(percentageOfErrors, '999D9%') as percentOfErrors
                  from (
