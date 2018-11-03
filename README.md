@@ -4,10 +4,14 @@ Log Analysis is a python program that reports against a mock psql news database.
 # Installation #
 You can get the newsdata.sql file for the mock database [I'm an inline-style link](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
 
-Once you have that zip file downloaded and unzip it. To import the schema and data intothe news database run the following command:
+Once you have that zip file downloaded and unzip it. Start by creating the news database first. Make sure you are in the psql command line and run:
+
+`CREATE DATABASE news;`
+
+You can now exit the psql command line. To import the schema and data into the news database run the following command from the terminal:
 
 `psql -d news -f newsdata.sql`
 
-After you download the file, to run the program simply type
+To run the reports simply type
 
 `python log_analysis.py`
