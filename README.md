@@ -12,7 +12,7 @@ You can now exit the psql command line. To import the schema and data into the n
 
 `psql -d news -f newsdata.sql`
 
-If you do not have the psycopg2 module installed, from the command line run:
+If you do not have the psycopg2 module installed, from the terminal run:
 
 `pip install psycopg2`
 
