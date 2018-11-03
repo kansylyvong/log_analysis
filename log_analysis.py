@@ -3,14 +3,26 @@
 import psycopg2
 import datetime
 
+def execute_query(query):
+    #executes query and returns results
 
+    try:
+        db = psycopg2.connect("dbname=news")
+        
+        c = db.cursor()
+
+        c.execute(query)
+        
+        data = c.fetchall()
+
+        db.close()
+        
+        return data
+    except (Exception, psycopg2.DatabaseError) as e:
+        print(e)
 def get_popular_articles():
 
-    db = psycopg2.connect("dbname=news")
-
-    c = db.cursor()
-
-    c.execute("""select articles.title, dt.views
+    query = """select articles.title, dt.views
                  from (
                  select substring(path, 10) as title, count(*) as views
                  from log where path != '/' and status = '200 OK'
@@ -18,22 +30,18 @@ def get_popular_articles():
                  join articles on
                  articles.slug = dt.title
                  order by dt.views desc
-                 limit 3;""")
+                 limit 3;"""
+    
+    data = execute_query(query)
 
-    data = c.fetchall()
     print("\nPrinting three most popular articles of all time\n")
     for title, views in data:
         print('"{}" - {} views'.format(title, views))
-    db.close()
 
 
 def get_popular_authors():
 
-    db = psycopg2.connect("dbname=news")
-
-    c = db.cursor()
-
-    c.execute("""select authors.name, sum(dt.views) as views
+    query = """select authors.name, sum(dt.views) as views
                  from (
                  select substring(path, 10) as title, count(*) as views
                  from log where path != '/' and status = '200 OK'
@@ -44,22 +52,18 @@ def get_popular_authors():
                  join authors on
                  articles.author = authors.id
                  group by authors.name
-                 order by views desc;""")
+                 order by views desc;"""
 
-    data = c.fetchall()
+    data = execute_query(query)
+
     print("\nPrinting most popular authors of all time\n")
     for author, views in data:
         print('"{}" - {} views'.format(author, views))
-    db.close()
 
 
 def get_errors_above_one():
 
-    db = psycopg2.connect("dbname=news")
-
-    c = db.cursor()
-
-    c.execute("""select day,
+    query = """select day,
                  to_char(percentageOfErrors, '999D9%') as percentOfErrors
                  from (
                  select day,
@@ -73,14 +77,14 @@ def get_errors_above_one():
                  count(*) as totalHits
                  from log
                  group by day) as dt ) as ddt
-                 where percentageOfErrors > 1;""")
+                 where percentageOfErrors > 1;"""
 
-    data = c.fetchall()
+    data = execute_query(query)
+
     print("\nPrinting days that had errors above 1 percent\n")
     for day,percent in data:
         day = day.strftime('%m/%d/%Y')
         print('{} - {} errors'.format(day, percent.lstrip()))
-    db.close()
 
 
 get_popular_articles()
