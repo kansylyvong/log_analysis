@@ -3,6 +3,7 @@
 import psycopg2
 import datetime
 
+
 def execute_query(query):
     #executes query and returns results
 
@@ -20,8 +21,10 @@ def execute_query(query):
         return data
     except (Exception, psycopg2.DatabaseError) as e:
         print(e)
-def get_popular_articles():
 
+
+def get_popular_articles():
+    #queries the news db and return 3 most popular articles
     query = """select articles.title, dt.views
                  from (
                  select substring(path, 10) as title, count(*) as views
@@ -40,7 +43,7 @@ def get_popular_articles():
 
 
 def get_popular_authors():
-
+    #queries news db and returns most popular authors by views
     query = """select authors.name, sum(dt.views) as views
                  from (
                  select substring(path, 10) as title, count(*) as views
@@ -62,7 +65,7 @@ def get_popular_authors():
 
 
 def get_errors_above_one():
-
+    #queries news db and returns days with errors above 1%
     query = """select day,
                  to_char(percentageOfErrors, '999D9%') as percentOfErrors
                  from (
