@@ -16,6 +16,6 @@ If you do not have the psycopg2 module installed, from the terminal run:
 
 `pip install psycopg2`
 
-To run the reports type the following from the command line:
+To run the reports type the following into the terminal: 
 
 `python log_analysis.py`
