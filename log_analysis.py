@@ -87,6 +87,7 @@ def get_errors_above_one():
         print('{} - {} errors'.format(day, percent.lstrip()))
 
 
-get_popular_articles()
-get_popular_authors()
-get_errors_above_one()
+if __name__ == '__main__':
+    get_popular_articles()
+    get_popular_authors()
+    get_errors_above_one()
