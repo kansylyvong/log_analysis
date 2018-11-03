@@ -21,8 +21,8 @@ def get_popular_articles():
 
     data = c.fetchall()
     print("\nPrinting three most popular articles of all time\n")
-    for datum in data:
-        print("\"%s\" -- %s views" % (datum[0], datum[1]))
+    for title, views in data:
+        print('"{}" - {} views'.format(title, views))
     db.close()
 
 
@@ -47,8 +47,8 @@ def get_popular_authors():
 
     data = c.fetchall()
     print("\nPrinting most popular authors of all time\n")
-    for datum in data:
-        print("\"%s\" -- %s views" % (datum[0], datum[1]))
+    for author, views in data:
+        print('"{}" - {} views'.format(author, views))
     db.close()
 
 
@@ -76,10 +76,9 @@ def get_errors_above_one():
 
     data = c.fetchall()
     print("\nPrinting days that had errors above 1 percent\n")
-    for datum in data:
-        day = datum[0]
+    for day,percent in data:
         day = day.strftime('%m/%d/%Y')
-        print("%s -- %s errors" % (day, datum[1].lstrip()))
+        print('{} - {} errors'.format(day, percent.lstrip()))
     db.close()
 
 
