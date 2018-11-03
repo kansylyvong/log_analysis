@@ -5,26 +5,21 @@ import datetime
 
 
 def execute_query(query):
-    #executes query and returns results
+    # executes query against news db  and returns results
 
     try:
         db = psycopg2.connect("dbname=news")
-        
         c = db.cursor()
-
         c.execute(query)
-        
         data = c.fetchall()
-
         db.close()
-        
         return data
     except (Exception, psycopg2.DatabaseError) as e:
         print(e)
 
 
 def get_popular_articles():
-    #queries the news db and return 3 most popular articles
+    # queries the news db and return 3 most popular articles
     query = """select articles.title, dt.views
                  from (
                  select substring(path, 10) as title, count(*) as views
@@ -34,16 +29,14 @@ def get_popular_articles():
                  articles.slug = dt.title
                  order by dt.views desc
                  limit 3;"""
-    
     data = execute_query(query)
-
     print("\nPrinting three most popular articles of all time\n")
     for title, views in data:
         print('"{}" - {} views'.format(title, views))
 
 
 def get_popular_authors():
-    #queries news db and returns most popular authors by views
+    # queries news db and returns most popular authors by views
     query = """select authors.name, sum(dt.views) as views
                  from (
                  select substring(path, 10) as title, count(*) as views
@@ -56,16 +49,14 @@ def get_popular_authors():
                  articles.author = authors.id
                  group by authors.name
                  order by views desc;"""
-
     data = execute_query(query)
-
     print("\nPrinting most popular authors of all time\n")
     for author, views in data:
         print('"{}" - {} views'.format(author, views))
 
 
 def get_errors_above_one():
-    #queries news db and returns days with errors above 1%
+    # queries news db and returns days with errors above 1%
     query = """select day,
                  to_char(percentageOfErrors, '999D9%') as percentOfErrors
                  from (
@@ -81,11 +72,9 @@ def get_errors_above_one():
                  from log
                  group by day) as dt ) as ddt
                  where percentageOfErrors > 1;"""
-
     data = execute_query(query)
-
     print("\nPrinting days that had errors above 1 percent\n")
-    for day,percent in data:
+    for day, percent in data:
         day = day.strftime('%m/%d/%Y')
         print('{} - {} errors'.format(day, percent.lstrip()))
 
